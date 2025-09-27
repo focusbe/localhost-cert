@@ -188,5 +188,7 @@ module.exports = function createRootCert() {
     );
     // console.log(rootCrt);
     console.log(`-----------------${getServerCertPath('crt')}-----------------`);
+    console.log(localhostCrt);
     console.log(`-----------------${getServerCertPath('key')}-----------------`);
+    console.log(localhostKey);
 };
