@@ -55,13 +55,15 @@ function restoreOriginalFiles() {
 function publishPackage(name) {
     console.log(`Publishing ${name}...`);
     updatePackageName(name);
+    const env = {
+        ...process.env,
+        npm_config_registry: 'https://registry.npmjs.org/',
+        npm_config_always_auth: 'true',
+        npm_config__authToken: npmToken,
+    };
     execSync('npm publish --access public', {
         stdio: 'inherit',
-        env: {
-            ...process.env,
-            npm_config_registry: 'https://registry.npmjs.org/',
-            NODE_AUTH_TOKEN: npmToken,
-        },
+        env,
         cwd: projectRoot,
     });
 }
