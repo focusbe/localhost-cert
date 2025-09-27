@@ -132,23 +132,14 @@ module.exports = function createRootCert() {
         { type: 7, value: '192.168.100.1' },
     ];
 
-    for (let a = 0; a <= 3; a += 1) {
+    [0, 1, 3].forEach((a) => {
         for (let b = 1; b <= 255; b += 1) {
             altNames.push({
                 type: 7,
                 value: `192.168.${a}.${b}`,
             });
         }
-    }
-
-    for (let a = 0; a <= 255; a += 1) {
-        for (let b = 1; b <= 255; b += 1) {
-            altNames.push({
-                type: 7,
-                value: `10.0.${a}.${b}`,
-            });
-        }
-    }
+    });
 
     serverCert.setExtensions([
         {
@@ -195,7 +186,7 @@ module.exports = function createRootCert() {
     console.log(
         `-----------------${getRootCertPath('pem')}-----------------`
     );
-    console.log(rootCrt);
+    // console.log(rootCrt);
     console.log(`-----------------${getServerCertPath('crt')}-----------------`);
     console.log(localhostCrt);
     console.log(`-----------------${getServerCertPath('key')}-----------------`);
