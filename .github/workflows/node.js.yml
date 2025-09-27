@@ -6,30 +6,32 @@ name: Node.js CI
 on:
     push:
         branches: ['main']
-    pull_request:
-        branches: ['main']
+    release:
+        types: [published]
 
 jobs:
     build:
         runs-on: ubuntu-latest
         env:
             GH_TOKEN: ${{ secrets.GH_TOKEN }}
+            NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        strategy:
+            matrix:
+                node-version: ['18.x']
 
         steps:
-            - uses: actions/checkout@v3
-            - name: Use Node.js 16.x
-              uses: actions/setup-node@v3
+            - uses: actions/checkout@v4
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v4
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: 'npm'
-            - run: npm install
-            - name: Check commit message
-              run: |
-                  if [[ "${{ github.event.head_commit.message }}" == *"generate root pem"* ]]; then
-                    echo "Commit message contains the keyword."
-                    # Perform additional actions or steps here
-                    node genrate.js
-                  else
-                    echo "Commit message does not contain the keyword."
-                    # Perform other actions or steps here
-                  fi
+            - name: Install dependencies
+              run: npm install
+            - name: Generate certificates and upload
+              run: node genrate.js
+            - name: Run full workflow test
+              run: npm test
+            - name: Publish to npm on release
+              if: github.event_name == 'release'
+              run: npm run publish:packages

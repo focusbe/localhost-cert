@@ -14,7 +14,9 @@ function getRootCrt() {
     return readFileFromDirAsync(getRootCertPath('crt'));
 }
 function writeFileToDir(file, content) {
-    return fs.writeFileSync(path.resolve(__dirname, '../', file), content);
+    const targetPath = path.resolve(__dirname, '../', file);
+    fs.ensureDirSync(path.dirname(targetPath));
+    return fs.writeFileSync(targetPath, content);
 }
 function readCert(name) {
     return readFileFromDir(getCertRelativePath(name));

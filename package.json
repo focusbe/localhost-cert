@@ -3,7 +3,8 @@
     "version": "2.0.0",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "node tests/fullWorkflow.js",
+        "publish:packages": "node scripts/publishBoth.js"
     },
     "bin": {
         "cra-cert": "bin/cra-cert.js"
