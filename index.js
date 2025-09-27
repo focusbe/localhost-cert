@@ -2,18 +2,20 @@
 const checkRootCertInstall = require('./modules/checkRootCertInstall');
 const installRootCert = require('./modules/installRootCert');
 const { readCert } = require('./modules/utils');
-const getHttpsConfig = ({ autoInstall = true } = {}) => {
+
+const getHttpsConfig = async ({ autoInstall = true } = {}) => {
     if (autoInstall) {
-        checkRootCertInstall().then((res) => {
-            console.log('is root install', res);
-            if (!res) {
-                installRootCert();
-            }
-        });
+        const isInstalled = await checkRootCertInstall();
+        console.log('is root install', isInstalled);
+        if (!isInstalled) {
+            await installRootCert();
+        }
     }
+
     return {
         cert: readCert('localhost.crt'),
         key: readCert('localhost.key'),
     };
 };
+
 module.exports = getHttpsConfig;
