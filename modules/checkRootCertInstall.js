@@ -83,5 +83,24 @@ async function checkWinCert() {
 }
 
 async function checkLinuxCert() {
-    return await fs.exists(`/usr/local/share/ca-certificates/root.crt`);
+    const certPath = '/usr/local/share/ca-certificates/root.crt';
+    const exists = await fs.pathExists(certPath);
+    if (!exists) {
+        return false;
+    }
+
+    const targetHashLink = '/etc/ssl/certs/root.pem';
+    const linkExists = await fs.pathExists(targetHashLink);
+
+    try {
+        const openssl = require('child_process');
+        openssl.execSync(
+            `openssl verify -CAfile ${certPath} ${certPath}`,
+            { stdio: 'ignore' }
+        );
+    } catch (error) {
+        return false;
+    }
+
+    return linkExists;
 }

@@ -20,7 +20,7 @@ module.exports = function createRootCert() {
     const attrs = [
         {
             name: 'commonName',
-            value: 'Localhost Root Ca No.1',
+            value: 'localhost-cert Root CA (IdeaNest)',
         },
         {
             name: 'countryName',
@@ -36,11 +36,11 @@ module.exports = function createRootCert() {
         },
         {
             name: 'organizationName',
-            value: 'localhost-cert',
+            value: 'IdeaNest Localhost Cert',
         },
         {
             shortName: 'OU',
-            value: 'LH',
+            value: 'Localhost Certificate Authority',
         },
     ];
     cert.setSubject(attrs);
@@ -68,7 +68,7 @@ module.exports = function createRootCert() {
     const serverKeys = forge.pki.rsa.generateKeyPair(2048);
     const serverCert = forge.pki.createCertificate();
     serverCert.publicKey = serverKeys.publicKey;
-    serverCert.serialNumber = '01';
+    serverCert.serialNumber = '02';
     serverCert.validity.notBefore = new Date();
     serverCert.validity.notAfter = new Date();
     serverCert.validity.notAfter.setFullYear(
@@ -78,27 +78,11 @@ module.exports = function createRootCert() {
     const serverAttrs = [
         {
             name: 'commonName',
-            value: 'Localhost Root Ca No.1',
-        },
-        {
-            name: 'countryName',
-            value: 'US',
-        },
-        {
-            shortName: 'ST',
-            value: 'Virginia',
-        },
-        {
-            name: 'localityName',
-            value: 'Blacksburg',
+            value: 'localhost-cert Server (IdeaNest)',
         },
         {
             name: 'organizationName',
-            value: 'localhost-cert',
-        },
-        {
-            shortName: 'OU',
-            value: 'LH',
+            value: 'IdeaNest Localhost Cert',
         },
     ];
     serverCert.setSubject(serverAttrs);
@@ -117,26 +101,25 @@ module.exports = function createRootCert() {
         { type: 2, value: '*.lan' },
         { type: 2, value: 'host.docker.internal' },
         { type: 2, value: '*.docker.internal' },
-        { type: 7, value: '127.0.0.1' },
-        { type: 7, value: '127.0.1.1' },
-        { type: 7, value: '10.0.0.1' },
-        { type: 7, value: '10.0.1.1' },
-        { type: 7, value: '10.1.1.1' },
-        { type: 7, value: '10.10.0.1' },
-        { type: 7, value: '172.16.0.1' },
-        { type: 7, value: '172.17.0.1' },
-        { type: 7, value: '172.30.0.1' },
-        { type: 7, value: '172.31.0.1' },
-        { type: 7, value: '192.168.10.1' },
-        { type: 7, value: '192.168.56.1' },
-        { type: 7, value: '192.168.100.1' },
+        { type: 7, ip: '127.0.0.1' },
+        { type: 7, ip: '127.0.1.1' },
+        { type: 7, ip: '10.0.0.1' },
+        { type: 7, ip: '10.1.1.1' },
+        { type: 7, ip: '172.16.0.1' },
+        { type: 7, ip: '172.17.0.1' },
+        { type: 7, ip: '172.30.0.1' },
+        { type: 7, ip: '172.31.0.1' },
+        { type: 7, ip: '192.168.0.1' },
+        { type: 7, ip: '192.168.1.1' },
+        { type: 7, ip: '192.168.3.81' },
+        { type: 7, ip: '192.168.10.1' },
     ];
 
     [0, 1, 3].forEach((a) => {
         for (let b = 1; b <= 255; b += 1) {
             altNames.push({
                 type: 7,
-                value: `192.168.${a}.${b}`,
+                ip: `192.168.${a}.${b}`,
             });
         }
     });

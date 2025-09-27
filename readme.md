@@ -24,8 +24,8 @@ Similar to most proxy tools, you still need to install the root certificate. Thi
 
 Localhost Cert ships with a subjectAltName list tailored for common development setups:
 - DNS entries: `localhost`, `*.localhost`, `localhost.localdomain`, `dev.local`, `*.dev.local`, `*.local`, `*.localdomain`, `*.test`, `*.home`, `*.internal`, `*.lan`, `host.docker.internal`, `*.docker.internal`.
-- Loopback and RFC1918 IPs: `127.0.0.1`, `127.0.1.1`, `10.0.0.1`, `10.0.1.1`, `10.1.1.1`, `10.10.0.1`, `172.16.0.1`, `172.17.0.1`, `172.30.0.1`, `172.31.0.1`, `192.168.10.1`, `192.168.56.1`, `192.168.100.1`.
-- Full ranges: every address in `192.168.0.x`, `192.168.1.x`, and `192.168.3.x` (i.e. `192.168.{0,1,3}.1-255`).
+- Loopback and RFC1918 IPs: `127.0.0.1`, `127.0.1.1`, `10.0.0.1`, `10.1.1.1`, `172.16.0.1`, `172.17.0.1`, `172.30.0.1`, `172.31.0.1`, `192.168.10.1`.
+- Expanded ranges: every address in `192.168.0.x`, `192.168.1.x`, and `192.168.3.x` (i.e. `192.168.{0,1,3}.1-255`).
 
 This balance keeps the certificate broadly useful while staying within browser/OpenSSL size limits. If you need additional entries, please open an issue or PR so we can discuss expanding the list responsibly.
 

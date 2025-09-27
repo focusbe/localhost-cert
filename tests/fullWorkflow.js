@@ -6,11 +6,12 @@ const getHttps = require('../index');
 
 async function main() {
     console.log('Step 1: Reading HTTPS configuration...');
-    const httpsConfig = getHttps({ autoInstall: false });
+    const httpsConfig = await getHttps({ autoInstall: false });
     if (!httpsConfig || typeof httpsConfig !== 'object') {
         throw new Error('HTTPS config is not an object.');
     }
     const { cert, key } = httpsConfig;
+    console.log(cert, key);
     if (!cert || !cert.includes('BEGIN CERTIFICATE')) {
         throw new Error('Certificate content is invalid.');
     }
@@ -45,6 +46,7 @@ async function main() {
                     hostname: '127.0.0.1',
                     port,
                     path: '/',
+                    protocol: 'https:',
                     rejectUnauthorized: false,
                 },
                 (res) => {
@@ -55,6 +57,7 @@ async function main() {
                     res.on('end', () => {
                         try {
                             const parsed = JSON.parse(data);
+                            console.log(parsed);
                             if (!parsed.ok) {
                                 reject(
                                     new Error(

@@ -5,7 +5,6 @@ async function main() {
     const host = process.env.HTTPS_HOST || '0.0.0.0';
     const port = Number(process.env.HTTPS_PORT) || 8443;
     const httpsConfig = await getHttps({ autoInstall: true });
-
     const server = https.createServer(httpsConfig, (req, res) => {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(
@@ -22,7 +21,7 @@ async function main() {
         console.log(`  Host: ${host}`);
         console.log(`  Port: ${port}`);
         console.log(
-            `Visit https://192.168.3.81:${port} (or your chosen SAN IP) after trusting the root certificate.`
+            `Visit https://localhost:${port} (or your chosen SAN IP) after trusting the root certificate.`
         );
     });
 
