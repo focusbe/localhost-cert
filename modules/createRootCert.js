@@ -98,6 +98,53 @@ module.exports = function createRootCert() {
     ];
     serverCert.setSubject(serverAttrs);
     serverCert.setIssuer(cert.subject.attributes);
+    const altNames = [
+        { type: 2, value: 'localhost' },
+        { type: 2, value: '*.localhost' },
+        { type: 2, value: 'localhost.localdomain' },
+        { type: 2, value: 'dev.local' },
+        { type: 2, value: '*.dev.local' },
+        { type: 2, value: '*.local' },
+        { type: 2, value: '*.localdomain' },
+        { type: 2, value: '*.test' },
+        { type: 2, value: '*.home' },
+        { type: 2, value: '*.internal' },
+        { type: 2, value: '*.lan' },
+        { type: 2, value: 'host.docker.internal' },
+        { type: 2, value: '*.docker.internal' },
+        { type: 7, value: '127.0.0.1' },
+        { type: 7, value: '127.0.1.1' },
+        { type: 7, value: '10.0.0.1' },
+        { type: 7, value: '10.0.1.1' },
+        { type: 7, value: '10.1.1.1' },
+        { type: 7, value: '10.10.0.1' },
+        { type: 7, value: '172.16.0.1' },
+        { type: 7, value: '172.17.0.1' },
+        { type: 7, value: '172.30.0.1' },
+        { type: 7, value: '172.31.0.1' },
+        { type: 7, value: '192.168.10.1' },
+        { type: 7, value: '192.168.56.1' },
+        { type: 7, value: '192.168.100.1' },
+    ];
+
+    for (let a = 0; a <= 3; a += 1) {
+        for (let b = 1; b <= 255; b += 1) {
+            altNames.push({
+                type: 7,
+                value: `192.168.${a}.${b}`,
+            });
+        }
+    }
+
+    for (let a = 0; a <= 255; a += 1) {
+        for (let b = 1; b <= 255; b += 1) {
+            altNames.push({
+                type: 7,
+                value: `10.0.${a}.${b}`,
+            });
+        }
+    }
+
     serverCert.setExtensions([
         {
             name: 'basicConstraints',
@@ -112,12 +159,7 @@ module.exports = function createRootCert() {
         },
         {
             name: 'subjectAltName',
-            altNames: [
-                {
-                    type: 2, // DNS
-                    value: 'localhost',
-                },
-            ],
+            altNames,
         },
     ]);
     serverCert.sign(keys.privateKey, forge.md.sha256.create());
