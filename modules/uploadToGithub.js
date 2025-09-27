@@ -1,7 +1,10 @@
 const { Octokit } = require('@octokit/rest');
 const fs = require('fs');
 const { readCert } = require('./utils');
-
+const {
+    getRootCertPath,
+    getServerCertPath,
+} = require('./shared');
 function getGitHubToken() {
     const token = process.env.GH_TOKEN;
     if (!token) {
@@ -42,9 +45,9 @@ module.exports = async function uploadToGithub() {
             console.error('Error uploading file to GitHub:', error.message);
         }
     }
-    const rootCrt = readCert('root.crt');
-    const localhostCrt = readCert('localhost.crt');
-    const localhostKey = readCert('localhost.key');
+    const rootCrt = readCert(getRootCertPath('crt'));
+    const localhostCrt = readCert(getServerCertPath('crt'));
+    const localhostKey = readCert(getServerCertPath('key'));
     console.log(rootCrt);
     console.log(localhostCrt);
     console.log(localhostKey);
@@ -53,7 +56,7 @@ module.exports = async function uploadToGithub() {
     await uploadFileToGitHubRepo(
         'IdeaNest-org',
         'localhost-cert',
-        'certs/root.crt',
+        getRootCertPath('crt'),
         'main',
         rootCrt
     );
@@ -61,7 +64,7 @@ module.exports = async function uploadToGithub() {
     await uploadFileToGitHubRepo(
         'IdeaNest-org',
         'localhost-cert',
-        'certs/localhost.crt',
+        getServerCertPath('crt'),
         'main',
         localhostCrt
     );
@@ -69,7 +72,7 @@ module.exports = async function uploadToGithub() {
     await uploadFileToGitHubRepo(
         'IdeaNest-org',
         'localhost-cert',
-        'certs/localhost.key',
+        getServerCertPath('key'),
         'main',
         localhostKey
     );

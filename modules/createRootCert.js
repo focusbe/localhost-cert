@@ -1,6 +1,11 @@
 const forge = require('node-forge');
 const { writeCert } = require('./utils');
-
+const {
+    getRootCertPath,
+    getServerCertPath,
+    getRootCertFilename,
+    getServerCertFilename,
+} = require('./shared');
 module.exports = function createRootCert() {
     const keys = forge.pki.rsa.generateKeyPair(2048);
     const cert = forge.pki.createCertificate();
@@ -168,20 +173,31 @@ module.exports = function createRootCert() {
     const localhostCrt = forge.pki.certificateToPem(serverCert);
     const localhostKey = forge.pki.privateKeyToPem(serverKeys.privateKey);
 
-    writeCert('root.pem', forge.pki.certificateToPem(cert));
-    writeCert('root.crt', forge.pki.certificateToPem(cert));
+    writeCert(
+        getRootCertPath('pem'),
+        forge.pki.certificateToPem(cert)
+    );
+    writeCert(
+        getRootCertPath('crt'),
+        forge.pki.certificateToPem(cert)
+    );
 
     // save server certificate and key
-    writeCert('localhost.crt', forge.pki.certificateToPem(serverCert));
     writeCert(
-        'localhost.key',
+        getServerCertPath('crt'),
+        forge.pki.certificateToPem(serverCert)
+    );
+    writeCert(
+        getServerCertPath('key'),
         forge.pki.privateKeyToPem(serverKeys.privateKey)
     );
     console.log('certs created');
-    console.log('-----------------root.pem-----------------');
+    console.log(
+        `-----------------${getRootCertPath('pem')}-----------------`
+    );
     console.log(rootCrt);
-    console.log('-----------------localhost.crt-----------------');
+    console.log(`-----------------${getServerCertPath('crt')}-----------------`);
     console.log(localhostCrt);
-    console.log('-----------------localhost.key-----------------');
+    console.log(`-----------------${getServerCertPath('key')}-----------------`);
     console.log(localhostKey);
 };

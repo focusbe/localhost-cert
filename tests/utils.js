@@ -3,12 +3,13 @@ const {
     readFileFromDirAsync,
     getRootCrt,
 } = require('../modules/utils');
+const { getRootCertPath } = require('../modules/shared');
 
-console.log(readFileFromDir('certs/root.crt'));
+console.log(readFileFromDir(getRootCertPath('crt')));
 
-readFileFromDirAsync('certs/root.crt').then((res) => {
+readFileFromDirAsync(getRootCertPath('crt')).then((res) => {
     console.log(res);
 });
 getRootCrt().then((res) => {
-  console.log(res);
+    console.log(res);
 });

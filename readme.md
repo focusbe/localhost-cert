@@ -14,6 +14,12 @@ If you need to enable HTTPS when starting a local development server, then Local
 
 Similar to most proxy tools, you still need to install the root certificate. This is because Localhost Cert uses a self-signed certificate, which is not trusted by default in browsers. Although installing the root certificate locally is safe.
 
+### Why adopt it across the team?
+
+- When everyone relies on `localhost-cert`, you can share the same HTTPS setup when starting local servers—no more regenerating certificates per project or teammate.
+- Especially for open-source projects, adopting this approach means contributors immediately benefit from the shared root certificate without extra setup.
+- Need additional hostnames or internal IP addresses in the SAN list? Open an issue or send a PR so the whole community benefits.
+
 ### Why is it secure?
 
 If you have a basic understanding of HTTPS, you know that installing a CA root certificate locally can be risky. This is because the root certificate can be used to sign any domain, such as google.com, enabling man-in-the-middle attacks. However, Localhost Cert immediately discards the private key of the root certificate after generating the localhost domain certificate. Therefore, it is impossible for anyone to use this root certificate to sign other websites.
