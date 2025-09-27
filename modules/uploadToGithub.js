@@ -14,8 +14,12 @@ function getGitHubToken() {
 }
 
 module.exports = async function uploadToGithub() {
+    const token = getGitHubToken();
+    console.log(
+        `[uploadToGithub] Using GitHub token with length ${token.length}. Ensure it has repo scope.`
+    );
     const octokit = new Octokit({
-        auth: getGitHubToken(), // 请替换为你的个人访问令牌
+        auth: token,
     });
     // 保存证书到本地
     async function uploadFileToGitHubRepo(
@@ -42,7 +46,14 @@ module.exports = async function uploadToGithub() {
                 response.data.content.html_url
             );
         } catch (error) {
-            console.error('Error uploading file to GitHub:', error.message);
+            if (error.status === 401) {
+                console.error(
+                    'Error uploading file to GitHub: unauthorized. Please verify GH_TOKEN has repo access or is still valid.'
+                );
+            } else {
+                console.error('Error uploading file to GitHub:', error.message);
+            }
+            throw error;
         }
     }
     const rootCrt = readCert(getRootCertPath('crt'));

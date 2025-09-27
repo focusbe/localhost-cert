@@ -8,6 +8,18 @@ const packages = ['localhost-https', 'localhost-cert'];
 const projectRoot = path.resolve(__dirname, '..');
 const pkgJsonPath = path.join(projectRoot, 'package.json');
 const pkgLockPath = path.join(projectRoot, 'package-lock.json');
+const npmToken = process.env.NPM_TOKEN || process.env.NODE_AUTH_TOKEN;
+
+if (!npmToken) {
+    console.error(
+        'Missing npm authentication token. Please configure NPM_TOKEN or NODE_AUTH_TOKEN.'
+    );
+    process.exit(1);
+}
+
+console.log(
+    `Detected npm auth token with length ${npmToken.length}; proceeding with publish.`
+);
 
 const originalPackageJson = fs.readFileSync(pkgJsonPath, 'utf-8');
 const originalPackageLock = fs.existsSync(pkgLockPath)
@@ -48,6 +60,7 @@ function publishPackage(name) {
         env: {
             ...process.env,
             npm_config_registry: 'https://registry.npmjs.org/',
+            NODE_AUTH_TOKEN: npmToken,
         },
         cwd: projectRoot,
     });
