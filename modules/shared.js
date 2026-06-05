@@ -1,4 +1,4 @@
-const CERT_VERSION = 'v2.0.1';
+const CERT_VERSION = 'v2.1.0';
 const CERT_DIRECTORY = `certs/${CERT_VERSION}`;
 const ROOT_CERT_BASENAME = 'root';
 const SERVER_CERT_BASENAME = 'localhost';

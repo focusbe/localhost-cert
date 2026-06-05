@@ -101,6 +101,9 @@ module.exports = function createRootCert() {
         { type: 2, value: '*.lan' },
         { type: 2, value: 'host.docker.internal' },
         { type: 2, value: '*.docker.internal' },
+        // nore.work team dev domain
+        { type: 2, value: 'local.nore.work' },
+        { type: 2, value: '*.local.nore.work' },
         { type: 7, ip: '127.0.0.1' },
         { type: 7, ip: '127.0.1.1' },
         { type: 7, ip: '10.0.0.1' },
@@ -115,11 +118,35 @@ module.exports = function createRootCert() {
         { type: 7, ip: '192.168.10.1' },
     ];
 
-    [0, 1, 3].forEach((a) => {
+    // 192.168.x.x common subnets (existing 0/1/3 + new 2/10/31)
+    [0, 1, 2, 3, 10, 31].forEach((a) => {
         for (let b = 1; b <= 255; b += 1) {
             altNames.push({
                 type: 7,
                 ip: `192.168.${a}.${b}`,
+            });
+        }
+    });
+
+    // 10.0.0.0/24, 10.1.1.0/24 — common private subnets
+    [
+        [0, 0],
+        [1, 1],
+    ].forEach(([a, b]) => {
+        for (let c = 1; c <= 255; c += 1) {
+            altNames.push({
+                type: 7,
+                ip: `10.${a}.${b}.${c}`,
+            });
+        }
+    });
+
+    // Docker default bridge 172.17.0/24, 172.18.0/24
+    [17, 18].forEach((a) => {
+        for (let c = 1; c <= 255; c += 1) {
+            altNames.push({
+                type: 7,
+                ip: `172.${a}.0.${c}`,
             });
         }
     });
