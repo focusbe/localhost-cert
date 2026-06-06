@@ -40,5 +40,9 @@ jobs:
                     echo "NPM_TOKEN secret not configured, skipping publish"
                     exit 0
                   fi
+                  # publishBoth.js uses npm_config__authToken which npm 10 ignores.
+                  # Write a .npmrc with the auth token as a workaround.
+                  echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > .npmrc
                   export NPM_TOKEN="$NODE_AUTH_TOKEN"
                   npm run publish:packages
+                  rm -f .npmrc
