@@ -34,4 +34,5 @@ jobs:
             - name: Run full workflow test
               run: npm test
             - name: Publish to npm on release
+              if: github.event_name == 'release' && env.NPM_TOKEN != ''
               run: npm run publish:packages
