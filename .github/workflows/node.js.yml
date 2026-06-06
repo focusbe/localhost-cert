@@ -36,8 +36,9 @@ jobs:
             - name: Publish to npm on release
               if: github.event_name == 'release'
               run: |
-                  if [ -z "$NPM_TOKEN" ]; then
-                    echo "NPM_TOKEN not configured, skipping publish"
+                  if [ -z "$NODE_AUTH_TOKEN" ]; then
+                    echo "NPM_TOKEN secret not configured, skipping publish"
                     exit 0
                   fi
+                  export NPM_TOKEN="$NODE_AUTH_TOKEN"
                   npm run publish:packages
