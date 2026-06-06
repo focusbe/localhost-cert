@@ -34,5 +34,10 @@ jobs:
             - name: Run full workflow test
               run: npm test
             - name: Publish to npm on release
-              if: github.event_name == 'release' && secrets.NPM_TOKEN != ''
-              run: npm run publish:packages
+              if: github.event_name == 'release'
+              run: |
+                  if [ -z "$NPM_TOKEN" ]; then
+                    echo "NPM_TOKEN not configured, skipping publish"
+                    exit 0
+                  fi
+                  npm run publish:packages
